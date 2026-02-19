@@ -1,0 +1,64 @@
+# Configuration for ensemble_3models.py
+
+defaults:
+  - _self_
+
+data:
+  batch_size: 10
+  num_samples: 100
+  output: "./outputs"
+  cle_data_path: "resources/images/bigscale_100"
+  tgt_data_path: "resources/images/target_images_100"
+  retrieval_path: "resources/retrieved_embeddings"
+  retrieval_dataset: "coco" 
+
+optim:
+  alpha: 0.005
+  epsilon: 16
+  steps: 300
+  optimizer: "adam"  # or "adam"
+  momentum: 0.9     # for SGD
+  momentum_decay: 0.9  # used for MI-FGSM
+  align: pooler_weighted # M-Attack-V2 default and recommended setting
+  tm_idx: [-2,-1] # deprecated: kept only for backward compatibility (unused in default setting)
+  beta: 0.3 # corresponds to lambda in the paper (used by pooler_weighted)
+  use_retrieval: true # Explicitly enable retrieval
+  multi_pass_num: 10 # corresponds to K in the paper (multi-pass count)
+
+model:
+  input_res: 224
+  crop_scale_1: [0.5, 1.0] 
+  crop_scale_2: [0.5, 1.0]
+  crop_scale_3: [0.5, 1.0]
+  changer_iters: [40, 260]
+  ensemble: true
+  device: "cuda:5"  # Using GPU 1
+  target_crop: true
+  # the backbone can select from
+  # clip: clip_b16, clip_b32, clip_l14, clip_l336, clip_laion, clip_laion_multilingual
+  # dinov2: dino_small, dino_base, dino_large
+  # blip2: blip2_2.7b, blip2_6.7b, blip2_flan, blip2_coco
+  # cnn: inception_v3, resnet50
+  # blip1: blip1_base, blip1_large, blip1_vqa
+  # backbone: ["clip_b16", "clip_b32", "clip_laion"]
+  # vit: vit_b16, vit_b32, vit_h14
+  backbone: ['clip_b16','clip_b32','clip_laion_b32','clip_laion_g14']
+  # backbone: ['clip_b16', 'clip_b32']
+  target_num: 3  # p + 1: one fixed target image + p retrieved target images
+  device_ids: [0,1,2,3,4] # parallel images
+
+wandb:
+  project: "your_wandb_project"
+  entity: "???"
+  run_name_prefix: "" # Optional run name prefix, e.g., "expA"
+
+blackbox:
+  model_name: ["gpt5-thinking-low", "claude4.0", "gemini2.5pro"]  # Recommended release trio
+  batch_size: 1
+  timeout: 30
+  parallel_images: 2  # Number of images to process in parallel
+
+
+attack: 'pgd_multi_pass' # default M-Attack-V2 attack; others are lightweight baselines
+
+generated_img_hash: null # optional: override hash for evaluation when reusing existing generated images
