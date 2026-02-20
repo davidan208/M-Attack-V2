@@ -7,9 +7,9 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/release/python-3100/)
 [![Contributions](https://img.shields.io/badge/contributions-welcome-green)](https://github.com/VILA-Lab/M-Attack-V2/issues)
 
-Official implementation of **Pushing the Frontier of Black-Box LVLM Attacks via Fine-Grained Detail Targeting**.
+Official implementation of our paper **Pushing the Frontier of Black-Box LVLM Attacks via Fine-Grained Detail Targeting**.
 
-![Improvement point](resources/readme/images/improvement.png)
+[<img src="resources/readme/images/improvement.png" width="650" />](resources/readme/images/improvement.png)
 
 > `M-Attack-V2` **substantially** improves [`M-Attack (v1)`](https://github.com/VILA-Lab/M-Attack) by reducing unstable local-gradient behavior and handling source-target asymmetry more explicitly.
 
@@ -75,19 +75,23 @@ Expected folders:
 
 ### Main Result
 
-![Main result](resources/readme/images/main_result.png)
+[<img src="resources/readme/images/main_result.png" width="950" />](resources/readme/images/main_result.png)
+
 
 ### Main Algorithm
 
-![Main algorithm](resources/readme/images/main.png)
+[<img src="resources/readme/images/main.png" width="750" />](resources/readme/images/main.png)
 
 ### Framework Reformulation (v1 vs Ours)
 
 M-Attack (v1, [GitHub](https://github.com/VILA-Lab/M-Attack)):
-![M-Attack v1 equation](resources/readme/images/v1_equ.png)
+
+[<img src="resources/readme/images/v1_equ.png" width="350" />](resources/readme/images/v1_equ.png)
 
 Asymmetric matching (ours):
-![M-Attack v2 asymmetric equation](resources/readme/images/v2_equ.png)
+
+[<img src="resources/readme/images/v2_equ.png" width="350" />](resources/readme/images/v2_equ.png)
+
 
 `MCA` (Multi-Crop Alignment) improves expectation estimation by averaging alignment over multiple local crops.
 `ATA` (Auxiliary Target Alignment) improves target semantic sampling by using auxiliary target cues for a stabler reference.
