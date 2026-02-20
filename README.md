@@ -1,7 +1,7 @@
 # M-Attack-V2
 
 [![Website](https://img.shields.io/badge/%F0%9F%93%B1-website-purple)](https://vila-lab.github.io/M-Attack-V2-Website/)
-<a href="https://arxiv.org/abs/2503.10635"><img src="https://img.shields.io/badge/arXiv-2503.10635-b31b1b.svg" alt="arXiv"></a>
+<a href="https://arxiv.org/abs/2602.17645"><img src="https://img.shields.io/badge/arXiv-2602.17645-b31b1b.svg" alt="arXiv"></a>
 [![Follow @vila_shen_lab](https://img.shields.io/twitter/url?url=https%3A%2F%2Fx.com%2Fvila_shen_lab&label=Follow%20%40vila_shen_lab)](https://x.com/vila_shen_lab)
 [![License](https://img.shields.io/badge/License-MIT-gold)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/release/python-3100/)
@@ -91,3 +91,15 @@ Asymmetric matching (ours):
 
 `MCA` (Multi-Crop Alignment) improves expectation estimation by averaging alignment over multiple local crops.
 `ATA` (Auxiliary Target Alignment) improves target semantic sampling by using auxiliary target cues for a stabler reference.
+
+## 📝 Citation
+
+If you find this project useful in your research or applications, please consider giving it a star ⭐ and citing our work:
+
+```bibtex
+@article{zhao2026pushingfrontierblackboxlvlm,
+  title={Pushing the Frontier of Black-Box LVLM Attacks via Fine-Grained Detail Targeting},
+  author={Zhao, Xiaohan and Li, Zhaoyi and Luo, Yaxin and Cui, Jiacheng and Shen, Zhiqiang},
+  journal={arXiv preprint arXiv:2602.17645},
+  year={2026}
+}
