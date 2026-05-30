@@ -17,6 +17,5 @@ torch==2.9.0
 torchgeo==0.9.0
 torchvision==0.24.0
 tqdm==4.67.1
-transformers==5.0.0.dev0
 wandb==0.27.0
 clip @ git+https://github.com/openai/CLIP.git
