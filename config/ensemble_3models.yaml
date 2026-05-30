@@ -5,10 +5,10 @@ defaults:
 
 data:
   batch_size: 10
-  num_samples: 100
-  output: "./outputs"
-  cle_data_path: "resources/images/bigscale_100"
-  tgt_data_path: "resources/images/target_images_100"
+  num_samples: 1000
+  output: "./m_attack_v2_output"
+  cle_data_path: "resources/images/bigscale"
+  tgt_data_path: "resources/images/target_images"
   retrieval_path: "resources/retrieved_embeddings"
   retrieval_dataset: "coco" 
 
@@ -32,7 +32,7 @@ model:
   crop_scale_3: [0.5, 1.0]
   changer_iters: [40, 260]
   ensemble: true
-  device: "cuda:5"  # Using GPU 1
+  device: "cuda:0"  # Using GPU 0 (single GPU)
   target_crop: true
   # the backbone can select from
   # clip: clip_b16, clip_b32, clip_l14, clip_l336, clip_laion, clip_laion_multilingual

@@ -80,11 +80,11 @@ class ModelConfig:
 class MainConfig:
     """Main configuration combining all sub-configs"""
 
-    data: DataConfig = DataConfig()
-    optim: OptimConfig = OptimConfig()
-    model: ModelConfig = ModelConfig()
-    wandb: WandbConfig = WandbConfig()
-    blackbox: BlackboxConfig = BlackboxConfig()
+    data: DataConfig = field(default_factory=DataConfig)
+    optim: OptimConfig = field(default_factory=OptimConfig)
+    model: ModelConfig = field(default_factory=ModelConfig)
+    wandb: WandbConfig = field(default_factory=WandbConfig)
+    blackbox: BlackboxConfig = field(default_factory=BlackboxConfig)
     attack: str = "pgd_multi_pass"  # main M-Attack-V2 attack
     generated_img_hash: Optional[str] = None  # optional eval-only hash override
 
@@ -94,5 +94,7 @@ class MainConfig:
 class Ensemble3ModelsConfig(MainConfig):
     """Configuration for ensemble_3models.py"""
 
-    data: DataConfig = DataConfig(batch_size=1)
-    model: ModelConfig = ModelConfig(backbone=["B16", "B32", "Laion"])
+    data: DataConfig = field(default_factory=lambda: DataConfig(batch_size=1))
+    model: ModelConfig = field(
+        default_factory=lambda: ModelConfig(backbone=["B16", "B32", "Laion"])
+    )
