@@ -328,6 +328,10 @@ class EnsWeightedMultiAlignmentLoss(EnsAlignmentLoss):
         for model in self.extractors:
             # Shape: [batch_size, feature_dim]
             features = model(source_img, return_dict=False).squeeze()
+            # squeeze() drops the batch dim when batch_size == 1 (-> [d]).
+            # Restore it so downstream einops patterns ("b d -> ...") still work.
+            if features.dim() == 1:
+                features = features.unsqueeze(0)
             source_features_per_model.append(features)
 
         # Compute weighted alignment loss
