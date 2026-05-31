@@ -56,6 +56,13 @@ from PIL import Image
 from torch import nn
 from tqdm import tqdm
 
+# Use file-system based sharing to avoid /dev/shm exhaustion in containers
+# (small default shm size causes "unable to allocate shared memory" crashes).
+try:
+    torch.multiprocessing.set_sharing_strategy("file_system")
+except Exception:
+    pass
+
 from attack import AttackFramework
 from config_schema import MainConfig
 from surrogates.FeatureExtractors import (
@@ -87,9 +94,12 @@ for _dict, _cls in [
 
 
 # Cap total parallelism at 4 threads.
-# Two dataloaders run concurrently (source + target), so 2 workers each = 4 total.
+# DataLoader workers are set to 0 to avoid /dev/shm exhaustion in containers:
+# worker processes share tensors via shared memory, which is tiny by default
+# in Docker (64MB) and causes "unable to allocate shared memory" crashes.
+# The attack is GPU-bound, so single-process data loading is fine.
 MAX_THREADS = 4
-DATALOADER_WORKERS = MAX_THREADS // 2  # 2 workers per loader -> 4 total
+DATALOADER_WORKERS = 0
 
 
 # ---------------------------------------------------------------------------
@@ -319,6 +329,7 @@ def main(cfg: MainConfig):
     # Sequential loop over batches (single GPU)
     num_batches = min(len(loader_source), len(loader_target))
     saved = 0
+    skipped = 0
     pbar = tqdm(
         zip(loader_source, loader_target),
         total=num_batches,
@@ -328,6 +339,16 @@ def main(cfg: MainConfig):
         (image_org, _, path_org),
         (image_tgt_primary, _, path_tgt),
     ) in enumerate(pbar):
+        # Resume: skip this batch if every output image already exists
+        expected_paths = [
+            os.path.join(output_dir, os.path.splitext(os.path.basename(p))[0] + ".png")
+            for p in path_org
+        ]
+        if all(os.path.exists(p) for p in expected_paths):
+            skipped += len(expected_paths)
+            pbar.set_postfix(saved=saved, skipped=skipped)
+            continue
+
         image_org = image_org.to(device)
         image_tgt_primary = image_tgt_primary.to(device)
 
@@ -362,9 +383,13 @@ def main(cfg: MainConfig):
             except Exception as e:
                 print(f"Error saving {save_path}: {e}")
 
-        pbar.set_postfix(saved=saved)
+        pbar.set_postfix(saved=saved, skipped=skipped)
 
-    print(f"\nDone! Generated {saved} adversarial images in: {os.path.abspath(output_dir)}")
+    total_in_output = len([f for f in os.listdir(output_dir) if f.lower().endswith(".png")])
+    print(
+        f"\nDone! Newly generated {saved}, skipped {skipped} already-existing. "
+        f"Total {total_in_output} images in: {os.path.abspath(output_dir)}"
+    )
 
 
 if __name__ == "__main__":
